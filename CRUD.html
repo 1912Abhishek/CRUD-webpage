@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Crud data.com</title>
+</head>
+<style>
+	body
+	{
+		background: #263544;
+	}
+	.flux1
+	{
+		background: black;
+		color: white;
+		width: 35%;
+		padding: 20px 50px 50px 50px;
+		margin: 80px 50px;
+		line-height: 50px;
+		float: left;
+		font-size: 30px;
+		border: 3px solid white;
+		border-radius: 30px;
+	}
+	.flux2
+	{
+		background: black;
+		color: white;
+		width: 35%;
+		padding:  20px 50px 50px 50px;
+		margin: 80px 50px 0px 0px;
+		float: right;
+		border: 3px solid white;
+		height: 340px;
+		overflow: scroll;
+		overflow: auto;
+	}
+	.flux1 input[type = "text"]
+	{
+		padding-right: 40px;
+		font-size: 20px;
+	}
+	.tab1 th
+	{
+		padding: 5px 18px;
+		background: blue;
+		
+	}
+	.delll
+	{
+		padding: 0px 6px;
+		text-decoration: none;
+		background: red;
+		color: black;
+		border-radius: 20px;
+		border: 1px solid black;
+	}
+	.edittt
+	{
+		padding: 0px 6px;
+		text-decoration: none;
+		background: green;
+		color: black;
+		border-radius: 20px;
+		border: 1px solid black;
+	}
+	#root
+	{
+		background: white;
+		color: black;
+		text-align: center;
+	}
+	
+
+</style>
+<body>
+
+	<div class="flux1">
+
+		<table>
+			<p style="text-align: center;font-size: 35px;"><u><b>Input Student Form</b></u></p>
+			<tr>
+				<td><b>Name : </b></td>
+				<td><input type="text" name="a" id="name"></td>
+			</tr>
+			<tr>
+				<td><b>Roll no : </b></td>
+				<td><input type="text" name="a" id="roll"></td>
+			</tr>
+			<tr>
+				<td><b>Subject : </b></td>
+				<td><input type="text" name="b" id="sub"></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="submit" value="submit" onclick = "managedata()"></td>
+			</tr>
+			<div id="msg"><div>
+		</table>
+
+	</div>
+
+
+	<div class="flux2">
+		<table border="1" >
+			<p style="text-align: center;font-size: 35px;"><u><b>Student Record</b></u></p>
+			<tr class="tab1">
+				<th>S.no</th>
+				<th>Name</th>
+				<th>Roll no</th>
+				<th>Class</th>
+				<th>Action</th>
+			</tr>
+			<tbody id="root">
+
+			</tbody>
+		</table>
+	</div>
+
+
+
+
+
+	<script>
+		//localStorage.clear()
+		selectdata()
+		let id = "no";
+		function managedata()
+		{
+			let name = document.getElementById('name').value;
+			let roll = document.getElementById('roll').value;
+			let sub = document.getElementById('sub').value;
+			let data = [name,roll,sub]
+			if(id=="no")
+			{
+				let arr = JSON.parse(localStorage.getItem("crud"))
+				if(arr == null)
+				{
+					let arr1 = new Array();
+					arr1.push(data);
+					localStorage.setItem("crud",JSON.stringify(arr1));
+				}
+				else
+			 	{
+					arr.push(data);
+					localStorage.setItem("crud",JSON.stringify(arr))
+				}
+			}
+			else
+			{
+				let arr = JSON.parse(localStorage.getItem("crud"))
+				arr[id]= data;
+				localStorage.setItem("crud",JSON.stringify(arr))
+
+			}
+			document.getElementById('name').value = " ";
+			document.getElementById('roll').value = " ";
+			document.getElementById('sub').value = " ";
+			selectdata();
+		}
+
+
+		function selectdata()
+		{
+			let arr = JSON.parse(localStorage.getItem("crud"));
+			html = "";
+			let s = 1 ;
+			for(let k in arr)
+			{
+				html += `<tr><td>${s}</td><td>${arr[k][0]}</td><td>${arr[k][1]}</td><td>${arr[k][2]}</td><td><a href="javascript:void(0) "onclick = "editdata(${k})" class = "edittt">edit</a>  &nbsp;<a href="javascript:void(0)" onclick = "deletedata(${k})" class = "delll">delete</a></td></tr>`
+				s++;
+			}
+
+			document.getElementById("root").innerHTML = html;
+		}
+
+
+		function editdata(k)
+		{
+			let arr = JSON.parse(localStorage.getItem("crud"));	
+			document.getElementById("name").value=arr[k][0];
+			document.getElementById("roll").value=arr[k][1];
+			document.getElementById("sub").value=arr[k][2];
+			id=k;
+		}
+
+
+
+		function deletedata(k)
+		{
+			let arr = JSON.parse(localStorage.getItem("crud"));
+			arr.splice(k,1);
+			localStorage.setItem("crud",JSON.stringify(arr));
+			selectdata();
+		}
+
+
+
+		
+			
+
+
+	</script>
+
+</body>
+</html>
